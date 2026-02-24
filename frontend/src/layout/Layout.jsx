@@ -7,14 +7,18 @@ import { Outlet } from "react-router";
 
 function Layout() {
   return (
-    <SidebarProvider>
-      <TopBar />
-      <AppSidebar />
-      <main>
-        <Outlet />
-      </main>
-      <Footer />
-    </SidebarProvider>
+    <>
+      <SidebarProvider>
+        <TopBar />
+        <AppSidebar />
+        <main className="w-full">
+          <div className="w-full h-dvh">
+            <Outlet />
+          </div>
+          <Footer />
+        </main>
+      </SidebarProvider>
+    </>
   );
 }
 

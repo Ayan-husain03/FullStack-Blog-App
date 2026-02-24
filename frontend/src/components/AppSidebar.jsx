@@ -80,7 +80,6 @@ function AppSidebar() {
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter />
     </Sidebar>
   );
 }
