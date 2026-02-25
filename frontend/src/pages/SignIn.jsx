@@ -1,7 +1,9 @@
 import { Button } from "@/components/ui/button";
 import {
   Card,
+  CardAction,
   CardContent,
+  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -18,14 +20,17 @@ import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import { toast } from "sonner";
+import { signUp } from "@/helper/routesNames";
+import { Link } from "react-router";
 
 function SignIn() {
   const formSchema = z.object({
-    email: z.string().email("Invalid email"),
-password: z
-  .string()
-  .min(6, "Password must be at least 6 characters")
-  .max(8, "Password must be at most 8 characters"),
+    email: z.string().email(),
+    password: z
+      .string()
+      .min(4, "Password must be at least 4 characters")
+      .max(8, "Password must be at most 8 characters"),
   });
 
   const form = useForm({
@@ -37,13 +42,28 @@ password: z
   });
   function onSubmit(data) {
     console.log(data);
+    form.reset();
+    toast.success("Login successfull", {
+      description: "Welcome back Ayan",
+      duration: 2000,
+    });
   }
   return (
     <div className="flex justify-center items-center w-full h-screen">
       <Card className="md:w-lg w-md">
         <form className="space-y-5" onSubmit={form.handleSubmit(onSubmit)}>
           <CardHeader>
-            <CardTitle>Sign-in</CardTitle>
+            <CardTitle className={`text-2xl`}>Login</CardTitle>
+            {/* <CardDescription>
+              Enter you email and password below to login
+            </CardDescription> */}
+            <CardAction>
+              <Link to={signUp}>
+                <Button variant="link" className="text-blue-600">
+                  Signup
+                </Button>
+              </Link>
+            </CardAction>
           </CardHeader>
           <CardContent>
             <Controller
