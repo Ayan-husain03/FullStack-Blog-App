@@ -58,8 +58,11 @@ function SignIn() {
               Enter you email and password below to login
             </CardDescription> */}
             <CardAction>
+              <span className="text-sm text-gray-500">
+                Don't have an Account
+              </span>
               <Link to={signUp}>
-                <Button variant="link" className="text-blue-600">
+                <Button variant="link" className="text-blue-600 p-1 cursor-pointer">
                   Signup
                 </Button>
               </Link>

@@ -1,9 +1,22 @@
+import cors from "cors";
+import dotenv from "dotenv";
+dotenv.config();
 import app from "./src/app.js";
-
-app.get("/", (req, res) => {
-  res.send("hello world");
-});
+import connectDb from "./src/database/db.js";
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+  }),
+);
 const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log(`server is running on http://localhost:${port}`);
-});
+
+connectDb()
+  .then(() => {
+    app.listen(port, () => {
+      console.log(`server is running on http://localhost:${port}`);
+    });
+  })
+  .catch(() => {
+    console.log("server failed and db connection");
+  });
