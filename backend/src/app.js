@@ -8,7 +8,7 @@ app.use(cookieParser());
 app.use(express.json());
 
 // * user routes
-app.use("/api/user/", userRouter);
+app.use("/api/user", userRouter);
 
 // ! using error handler
 app.use((err, req, res, next) => {

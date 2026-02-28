@@ -17,7 +17,6 @@ const userSchema = new Schema(
     email: {
       type: String,
       trim: true,
-      unique: true,
       required: true,
     },
     bio: {
@@ -29,7 +28,6 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
-      trim: true,
       required: true,
     },
   },
