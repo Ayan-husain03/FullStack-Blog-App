@@ -12,6 +12,7 @@ app.use("/api/user", userRouter);
 
 // ! using error handler
 app.use((err, req, res, next) => {
+  console.log("Error through middlware => ", err);
   const statusCode = err.statusCode || 500;
   const message = err.message || "internal server Error";
   res.status(statusCode).json({

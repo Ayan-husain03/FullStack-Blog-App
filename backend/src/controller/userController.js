@@ -13,33 +13,26 @@ const registerUser = async (req, res, next) => {
   if (isUserExist) {
     return next(handleError(409, "User already registered"));
   }
-  const user = await User.create({
+  await User.create({
     name,
     email,
     password,
   });
+  const user = await User.findOne({ email }).select("-password");
   return responseHandle(res, 201, user, "user created successfully");
 };
 
-const createUser = async (req, res, next) => {
-  const { name } = req.body;
-  if (!name) {
-    return next(handleError(401, "name is required"));
-  }
-  return responseHandle(res, 200, name, "name getting");
-};
-
 // ? Login controller
-const login = asyncHandler(async (req, res, next) => {
+const login = async (req, res, next) => {
   const { email, password } = req.body;
-  const isUser = await User.find({ email });
+  const isUser = await User.findOne({ email });
   if (!isUser) {
-    throw handleError(401, "User not exist");
+    return next(handleError(401, "User does not exist"));
   }
-  const isPasswordCorrect = isUser.comparePassword(password);
+  const isPasswordCorrect = await isUser.comparePassword(password);
   if (!isPasswordCorrect) {
-    throw handleError(400, "Password is invalid");
+    return next(handleError(400, "Password is incorrect"));
   }
-  return responseHandle(200, {}, "User logged in");
-});
-export { registerUser, login, createUser };
+  return responseHandle(res, 200, {}, "User loggedIn");
+};
+export { registerUser, login };
