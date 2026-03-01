@@ -3,6 +3,16 @@ import asyncHandler from "../lib/asyncHandler.js";
 import handleError from "../lib/handlerError.js";
 import responseHandle from "../lib/responseHandle.js";
 import User from "../models/user.model.js";
+import jwt from "jsonwebtoken";
+
+// ? ====== cookies options ===========
+const cookieOption = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+  path: "/",
+};
+// ? ====== ===========================
 
 const registerUser = async (req, res, next) => {
   const { email, name, password } = req.body;
@@ -33,6 +43,15 @@ const login = async (req, res, next) => {
   if (!isPasswordCorrect) {
     return next(handleError(400, "Password is incorrect"));
   }
-  return responseHandle(res, 200, {}, "User loggedIn");
+  const token = jwt.sign(
+    { _id: isUser?._id, name: isUser.name, email: isUser.email },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: process.env.JWT_EXPIRE,
+    },
+  );
+  const user = await User.findOne({ email: isUser.email }).select("-password");
+  res.cookie("token", token, cookieOption);
+  return responseHandle(res, 200, user, "User loggedIn");
 };
 export { registerUser, login };

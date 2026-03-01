@@ -17,9 +17,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { toast } from "sonner";
 import { signIn } from "@/helper/routesNames";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import api from "@/helper/api/api";
 
 function Signup() {
+  const navigate = useNavigate()
   const formSchema = z.object({
     name: z.string().min(4, "name must be 4 char long"),
     email: z.string().email(),
@@ -44,13 +46,23 @@ function Signup() {
       confirmPassword: "",
     },
   });
-  function onSubmit(data) {
-    console.log(data);
-    form.reset();
-    toast.success("create successfull", {
-      description: "your account has been created",
-      duration: 2000,
-    });
+  async function onSubmit(data) {
+    try {
+      const response = await api.post("/user/register", data);
+      toast.success("Create successful", {
+        description: response.data?.message || "Your account has been created",
+        duration: 2000,
+      });
+      form.reset();
+      navigate(signIn)
+    } catch (error) {
+      console.log(error.response?.data?.message);
+
+      toast.error("Something went wrong", {
+        description: error.response?.data?.message,
+        duration: 2000,
+      });
+    }
   }
   return (
     <div className="flex justify-center items-center w-full h-screen">
@@ -62,8 +74,14 @@ function Signup() {
               Enter you email and password below to login
             </CardDescription> */}
             <CardAction>
+              <span className="text-xs text-gray-500">
+                Already have an Account
+              </span>
               <Link to={signIn}>
-                <Button variant="link" className="text-blue-600">
+                <Button
+                  variant="link"
+                  className="text-blue-600 p-1 cursor-pointer"
+                >
                   login
                 </Button>
               </Link>
@@ -137,6 +155,7 @@ function Signup() {
                   <FieldLabel htmlFor={field.name}>confirm password</FieldLabel>
                   <Input
                     {...field}
+                    type="password"
                     id={field.name}
                     aria-invalid={fieldState.invalid}
                     placeholder="confirm password"
@@ -153,7 +172,6 @@ function Signup() {
             <Button type="submit" className="w-full">
               Create account
             </Button>
-            
           </CardFooter>
         </form>
       </Card>

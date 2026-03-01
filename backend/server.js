@@ -1,14 +1,14 @@
-import cors from "cors";
+
 import dotenv from "dotenv";
 dotenv.config();
 import app from "./src/app.js";
 import connectDb from "./src/database/db.js";
-app.use(
-  cors({
-    origin: process.env.FRONTEND_URL,
-    credentials: true,
-  }),
-);
+// app.use(
+//   cors({
+//     origin: process.env.FRONTEND_URL || "http://localhost:5173",
+//     credentials: true,
+//   }),
+// );
 const port = process.env.PORT || 3000;
 
 connectDb()

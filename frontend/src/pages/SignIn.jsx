@@ -23,6 +23,7 @@ import * as z from "zod";
 import { toast } from "sonner";
 import { signUp } from "@/helper/routesNames";
 import { Link } from "react-router";
+import api from "@/helper/api/api";
 
 function SignIn() {
   const formSchema = z.object({
@@ -40,13 +41,23 @@ function SignIn() {
       password: "",
     },
   });
-  function onSubmit(data) {
+  async function onSubmit(data) {
     console.log(data);
-    form.reset();
-    toast.success("Login successfull", {
-      description: "Welcome back Ayan",
-      duration: 2000,
-    });
+    try {
+      const res = await api.post("/user/login", data);
+      console.log(res.data?.message);
+      toast.success("User LogIn", {
+        description: res.data?.message || "you have been login",
+        duration: 2000,
+      });
+      console.log(res.data);
+    } catch (error) {
+      console.log(error.response?.data?.message);
+      toast.error("Login Failed", {
+        description: error.response?.data?.message || "Invalid credentials",
+        duration: 2000,
+      });
+    }
   }
   return (
     <div className="flex justify-center items-center w-full h-screen">
@@ -62,7 +73,10 @@ function SignIn() {
                 Don't have an Account
               </span>
               <Link to={signUp}>
-                <Button variant="link" className="text-blue-600 p-1 cursor-pointer">
+                <Button
+                  variant="link"
+                  className="text-blue-600 p-1 cursor-pointer"
+                >
                   Signup
                 </Button>
               </Link>
