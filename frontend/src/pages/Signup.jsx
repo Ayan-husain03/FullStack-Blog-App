@@ -69,21 +69,26 @@ function Signup() {
     <div className="flex justify-center items-center w-full h-screen">
       <Card className="md:w-lg w-md">
         <form className="space-y-5" onSubmit={form.handleSubmit(onSubmit)}>
-          <CardHeader>
-            <CardTitle className={`text-2xl`}>Create your account</CardTitle>
-            {/* <CardDescription>
-              Enter you email and password below to login
-            </CardDescription> */}
-            <CardAction>
-              <span className="text-xs text-gray-500">
-                Already have an Account
+          <h1 className="text-center sm:hidden font-semibold text-2xl">
+            Create your account
+          </h1>
+
+          <CardHeader className="space-y-4">
+            <CardTitle className="hidden sm:block text-2xl font-semibold">
+              Create your account
+            </CardTitle>
+
+            <CardAction className="flex items-center justify-between">
+              <span className="text-sm text-muted-foreground">
+                Already have an account?
               </span>
+
               <Link to={signIn}>
                 <Button
                   variant="link"
-                  className="text-blue-600 p-1 cursor-pointer"
+                  className="p-1 cursor-pointer text-blue-600 h-auto font-medium"
                 >
-                  login
+                  Login
                 </Button>
               </Link>
             </CardAction>

@@ -2,16 +2,44 @@ import React from "react";
 import { Button } from "./ui/button";
 import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "@/helper/firebase";
+import { toast } from "sonner";
+import { useNavigate } from "react-router";
+import { RouteIndex } from "@/helper/routesNames";
+import api from "@/helper/api/api";
 
 function GoogleLogin() {
+  const navigate = useNavigate();
   async function handleGoogleLogin() {
     try {
       const response = await signInWithPopup(auth, provider);
-      console.log(response);
-    } catch (error) {}
+      const user = response.user;
+      const data = {
+        name: user.displayName,
+        email: user.email,
+        avatar: user.photoURL,
+      };
+      const res = await api.post("/user/google", data);
+      console.log(res.data?.message);
+      toast.success("User LogIn", {
+        description: res.data?.message || "you have been login",
+        duration: 2000,
+      });
+      console.log(res.data);
+      navigate(RouteIndex);
+    } catch (error) {
+      console.log(error.response?.data?.message || error.message);
+      toast.error("Something went wrong", {
+        description: error.response?.data?.message || error.message,
+        duration: 2000,
+      });
+    }
   }
   return (
-    <Button className={"w-full cursor-pointer"} variant="outline" onClick={handleGoogleLogin}>
+    <Button
+      className={"w-full cursor-pointer"}
+      variant="outline"
+      onClick={handleGoogleLogin}
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         x="0px"

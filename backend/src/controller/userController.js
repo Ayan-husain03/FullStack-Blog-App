@@ -54,4 +54,32 @@ const login = async (req, res, next) => {
   res.cookie("token", token, cookieOption);
   return responseHandle(res, 200, user, "User loggedIn");
 };
-export { registerUser, login };
+
+// * Google login controller
+const googleLogin = async (req, res, next) => {
+  const { name, email, avatar } = req.body;
+  let user = await User.findOne({ email });
+  if (!user) {
+    const password = Math.random().toString(36).slice(-8);
+    // create user
+    user = await User.create({
+      name,
+      email,
+      password,
+      avatar,
+    });
+  }
+  const token = jwt.sign(
+    { _id: user?._id, name: user.name, email: user.email, avatar: user.avatar },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: process.env.JWT_EXPIRE,
+    },
+  );
+  const newUser = await User.findOne({ email: user.email }).select(
+    "-password",
+  );
+  res.cookie("token", token, cookieOption);
+  return responseHandle(res, 200, newUser, "User loggedIn");
+};
+export { registerUser, login, googleLogin };
