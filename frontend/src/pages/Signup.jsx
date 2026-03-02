@@ -19,9 +19,10 @@ import { toast } from "sonner";
 import { signIn } from "@/helper/routesNames";
 import { Link, useNavigate } from "react-router";
 import api from "@/helper/api/api";
+import GoogleLogin from "@/components/GoogleLogin";
 
 function Signup() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const formSchema = z.object({
     name: z.string().min(4, "name must be 4 char long"),
     email: z.string().email(),
@@ -54,7 +55,7 @@ function Signup() {
         duration: 2000,
       });
       form.reset();
-      navigate(signIn)
+      navigate(signIn);
     } catch (error) {
       console.log(error.response?.data?.message);
 
@@ -168,10 +169,22 @@ function Signup() {
               )}
             />
           </CardContent>
-          <CardFooter>
+          <CardFooter className="flex flex-col gap-3">
             <Button type="submit" className="w-full">
               Create account
             </Button>
+            {/* Divider */}
+            <div className="relative w-full">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-background px-2 text-muted-foreground">
+                  Or
+                </span>
+              </div>
+            </div>
+            <GoogleLogin />
           </CardFooter>
         </form>
       </Card>

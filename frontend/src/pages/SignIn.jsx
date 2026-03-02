@@ -24,6 +24,7 @@ import { toast } from "sonner";
 import { signUp } from "@/helper/routesNames";
 import { Link } from "react-router";
 import api from "@/helper/api/api";
+import GoogleLogin from "@/components/GoogleLogin";
 
 function SignIn() {
   const formSchema = z.object({
@@ -123,10 +124,22 @@ function SignIn() {
               )}
             />
           </CardContent>
-          <CardFooter>
+          <CardFooter className={"flex flex-col gap-3"}>
             <Button type="submit" className="w-full">
               Login
             </Button>
+            {/* Divider */}
+            <div className="relative w-full">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-background px-2 text-muted-foreground">
+                  Or
+                </span>
+              </div>
+            </div>
+            <GoogleLogin />
           </CardFooter>
         </form>
       </Card>
