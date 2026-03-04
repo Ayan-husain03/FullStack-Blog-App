@@ -21,12 +21,16 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { toast } from "sonner";
-import { signUp } from "@/helper/routesNames";
-import { Link } from "react-router";
+import { RouteIndex, signUp } from "@/helper/routesNames";
+import { Link, useNavigate } from "react-router";
 import api from "@/helper/api/api";
 import GoogleLogin from "@/components/GoogleLogin";
+import { useDispatch } from "react-redux";
+import { setUser } from "@/store/auth/authSlice";
 
 function SignIn() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const formSchema = z.object({
     email: z.string().email(),
     password: z
@@ -43,15 +47,15 @@ function SignIn() {
     },
   });
   async function onSubmit(data) {
-    console.log(data);
     try {
       const res = await api.post("/user/login", data);
-      console.log(res.data?.message);
+      // console.log(res.data?.message);
       toast.success("User LogIn", {
         description: res.data?.message || "you have been login",
         duration: 2000,
       });
-      console.log(res.data);
+      dispatch(setUser(res.data?.data));
+      navigate(RouteIndex);
     } catch (error) {
       console.log(error.response?.data?.message);
       toast.error("Login Failed", {
@@ -139,9 +143,9 @@ function SignIn() {
                 </span>
               </div>
             </div>
-            <GoogleLogin />
           </CardFooter>
         </form>
+        <GoogleLogin />
       </Card>
     </div>
   );

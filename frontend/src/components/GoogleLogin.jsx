@@ -6,9 +6,12 @@ import { toast } from "sonner";
 import { useNavigate } from "react-router";
 import { RouteIndex } from "@/helper/routesNames";
 import api from "@/helper/api/api";
+import { useDispatch } from "react-redux";
+import { setUser } from "@/store/auth/authSlice";
 
 function GoogleLogin() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   async function handleGoogleLogin() {
     try {
       const response = await signInWithPopup(auth, provider);
@@ -19,12 +22,13 @@ function GoogleLogin() {
         avatar: user.photoURL,
       };
       const res = await api.post("/user/google", data);
-      console.log(res.data?.message);
+      // console.log(res.data?.message);
       toast.success("User LogIn", {
         description: res.data?.message || "you have been login",
         duration: 2000,
       });
-      console.log(res.data);
+      // console.log(res.data);
+      dispatch(setUser(res.data?.data));
       navigate(RouteIndex);
     } catch (error) {
       console.log(error.response?.data?.message || error.message);

@@ -189,9 +189,9 @@ function Signup() {
                 </span>
               </div>
             </div>
-            <GoogleLogin />
           </CardFooter>
         </form>
+        <GoogleLogin />
       </Card>
     </div>
   );

@@ -5,7 +5,7 @@ import {
   registerUser,
 } from "../controller/userController.js";
 
-console.log("User Router Loaded");
+// console.log("User Router Loaded");
 const userRouter = Router();
 userRouter.get("/check", (req, res) => {
   res.send("USER ROUTER WORKING");
