@@ -6,10 +6,11 @@ import { toast } from "sonner";
 import { useNavigate } from "react-router";
 import { RouteIndex } from "@/helper/routesNames";
 import api from "@/helper/api/api";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "@/store/auth/authSlice";
 
 function GoogleLogin() {
+  const user = useSelector((state) => state.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   async function handleGoogleLogin() {
@@ -29,6 +30,7 @@ function GoogleLogin() {
       });
       // console.log(res.data);
       dispatch(setUser(res.data?.data));
+      console.log(user)
       navigate(RouteIndex);
     } catch (error) {
       console.log(error.response?.data?.message || error.message);

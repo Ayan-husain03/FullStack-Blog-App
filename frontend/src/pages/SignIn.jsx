@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -25,11 +25,12 @@ import { RouteIndex, signUp } from "@/helper/routesNames";
 import { Link, useNavigate } from "react-router";
 import api from "@/helper/api/api";
 import GoogleLogin from "@/components/GoogleLogin";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "@/store/auth/authSlice";
 
 function SignIn() {
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
   const navigate = useNavigate();
   const formSchema = z.object({
     email: z.string().email(),
@@ -55,6 +56,8 @@ function SignIn() {
         duration: 2000,
       });
       dispatch(setUser(res.data?.data));
+      // console.log(res.data?.data);
+      // console.log("outdated", user);
       navigate(RouteIndex);
     } catch (error) {
       console.log(error.response?.data?.message);
