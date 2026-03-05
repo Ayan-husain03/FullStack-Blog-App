@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "@/store/auth/authSlice";
 
 function GoogleLogin() {
-  const user = useSelector((state) => state.user);
+  // const user = useSelector((state) => state.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   async function handleGoogleLogin() {

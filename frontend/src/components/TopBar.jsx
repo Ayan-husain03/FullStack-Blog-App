@@ -6,7 +6,7 @@ import { LogIn, LogOut, Plus, User } from "lucide-react";
 import SearchBox from "./SearchBox";
 import { signIn } from "@/helper/routesNames";
 import { toast } from "sonner";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,13 +17,32 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import api from "@/helper/api/api";
+import { removeUser } from "@/store/auth/authSlice";
 
 const TopBar = () => {
   const user = useSelector((state) => state.user);
-  console.log(user);
+  const dispatch = useDispatch();
+  // console.log(user);
+  // console.log(user?.user?.avatar);
   function capitalize(word) {
     return word.charAt(0).toUpperCase() + word.slice(1);
   }
+  const handleLogout = async () => {
+    try {
+      const res = await api.get("/user/logout");
+      dispatch(removeUser());
+      toast.success("User Logout", {
+        description: res.data?.message || "use logout",
+        duration: 2000,
+      });
+    } catch (error) {
+      toast.error("Something went wrong", {
+        description: error.response?.data?.message || error.message,
+        duration: 2000,
+      });
+    }
+  };
   return (
     <div className="flex justify-between items-center md:px-12 px-3  w-full fixed py-3 z-40 shadow-sm border-b bg-white/50 backdrop-blur-sm ">
       <div>
@@ -76,10 +95,14 @@ const TopBar = () => {
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <Link className="font-semibold">
+                  <Button
+                    variant="ghost"
+                    className={"w-full"}
+                    onClick={handleLogout}
+                  >
                     <LogOut />
                     Logout
-                  </Link>
+                  </Button>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
             </DropdownMenuContent>

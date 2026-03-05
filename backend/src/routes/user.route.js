@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   googleLogin,
   login,
+  logout,
   registerUser,
 } from "../controller/userController.js";
 
@@ -14,5 +15,6 @@ userRouter.get("/check", (req, res) => {
 userRouter.post("/register", registerUser);
 userRouter.post("/login", login);
 userRouter.post("/google", googleLogin);
+userRouter.get("/logout", logout);
 
 export default userRouter;

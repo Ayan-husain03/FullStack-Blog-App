@@ -76,10 +76,15 @@ const googleLogin = async (req, res, next) => {
       expiresIn: process.env.JWT_EXPIRE,
     },
   );
-  const newUser = await User.findOne({ email: user.email }).select(
-    "-password",
-  );
+  const newUser = await User.findOne({ email: user.email }).select("-password");
   res.cookie("token", token, cookieOption);
   return responseHandle(res, 200, newUser, "User loggedIn");
 };
-export { registerUser, login, googleLogin };
+
+// ? logout controller
+const logout = async (req, res) => {
+  res.clearCookie("token", cookieOption);
+  return responseHandle(res, 200, {}, "user logged out");
+};
+
+export { registerUser, login, googleLogin, logout };
