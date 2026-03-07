@@ -30,7 +30,6 @@ function GoogleLogin() {
       });
       // console.log(res.data);
       dispatch(setUser(res.data?.data));
-      console.log(user)
       navigate(RouteIndex);
     } catch (error) {
       console.log(error.response?.data?.message || error.message);

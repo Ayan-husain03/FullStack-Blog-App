@@ -4,7 +4,7 @@ import { Button } from "./ui/button";
 import { Link } from "react-router";
 import { LogIn, LogOut, Plus, User } from "lucide-react";
 import SearchBox from "./SearchBox";
-import { signIn } from "@/helper/routesNames";
+import { profile, RouteIndex, signIn } from "@/helper/routesNames";
 import { toast } from "sonner";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -32,8 +32,8 @@ const TopBar = () => {
     try {
       const res = await api.get("/user/logout");
       dispatch(removeUser());
-      toast.success("User Logout", {
-        description: res.data?.message || "use logout",
+      toast.success("Logout", {
+        description: res.data?.message || "user logout",
         duration: 2000,
       });
     } catch (error) {
@@ -46,7 +46,9 @@ const TopBar = () => {
   return (
     <div className="flex justify-between items-center md:px-12 px-3  w-full fixed py-3 z-40 shadow-sm border-b bg-white/50 backdrop-blur-sm ">
       <div>
-        <img src={blogIcon} alt="" />
+        <Link to={RouteIndex}>
+          <img src={blogIcon} alt="" />
+        </Link>
       </div>
       <div className="w-md">
         <SearchBox />
@@ -82,7 +84,7 @@ const TopBar = () => {
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <Link>
+                  <Link to={profile}>
                     <User />
                     Profile
                   </Link>
@@ -94,15 +96,12 @@ const TopBar = () => {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Button
-                    variant="ghost"
-                    className={"w-full"}
-                    onClick={handleLogout}
-                  >
-                    <LogOut />
-                    Logout
-                  </Button>
+                <DropdownMenuItem
+                  className={"text-red-500 font-semibold"}
+                  onClick={handleLogout}
+                >
+                  <LogOut />
+                  Logout
                 </DropdownMenuItem>
               </DropdownMenuGroup>
             </DropdownMenuContent>

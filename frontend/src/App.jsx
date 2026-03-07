@@ -5,8 +5,9 @@ import Layout from "./layout/Layout";
 import Index from "./pages/Index";
 import SignIn from "./pages/SignIn";
 import Signup from "./pages/Signup";
-import { signIn, signUp } from "./helper/routesNames";
+import { profile, signIn, signUp } from "./helper/routesNames";
 import { Toaster } from "sonner";
+import Profile from "./pages/Profile";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Index />} />
+            <Route path={profile} element={<Profile />} />
           </Route>
           <Route path={signIn} element={<SignIn />} />
           <Route path={signUp} element={<Signup />} />
