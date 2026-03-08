@@ -87,4 +87,11 @@ const logout = async (req, res) => {
   return responseHandle(res, 200, {}, "user logged out");
 };
 
-export { registerUser, login, googleLogin, logout };
+// ? get me controller
+
+const getUser = async (req, res, next) => {
+  const user = req.user;
+  return responseHandle(res, 200, user, "user fetch successfully");
+};
+
+export { registerUser, login, googleLogin, logout, getUser };
