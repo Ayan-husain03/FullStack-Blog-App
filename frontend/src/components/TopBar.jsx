@@ -71,7 +71,9 @@ const TopBar = () => {
                 <AvatarImage
                   src={user?.user?.avatar || "https://placehold.net/avatar.png"}
                 />
-                <AvatarFallback>CN</AvatarFallback>
+                  <AvatarFallback>
+                      <img src="src/assets/profile.png" alt="" />
+                </AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent>

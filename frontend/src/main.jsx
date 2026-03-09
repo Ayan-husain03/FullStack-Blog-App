@@ -5,11 +5,12 @@ import App from "./App.jsx";
 import { Provider } from "react-redux";
 import { persistor, store } from "./store/store";
 import { PersistGate } from "redux-persist/integration/react";
+import { store2 } from "./store/store2";
 
 createRoot(document.getElementById("root")).render(
-  <Provider store={store}>
-    <PersistGate loading={<div>loading...</div>} persistor={persistor}>
-      <App />
-    </PersistGate>
+  <Provider store={store2}>
+    {/* <PersistGate loading={<div>loading...</div>} persistor={persistor}> */}
+    <App />
+    {/* </PersistGate> */}
   </Provider>,
 );

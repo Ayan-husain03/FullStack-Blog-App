@@ -1,25 +1,27 @@
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   Card,
+  CardAction,
   CardContent,
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
-import { Field, FieldLabel } from "@/components/ui/field";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
 import * as z from "zod";
+// import profile from "../assets/profile.png";
 
 function Profile() {
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  //   console.log(user);
+  const [passwordChanging, setPasswordChanging] = useState(false);
   const formSchema = z.object({
     name: z.string().min(3, "name must be 3 char long"),
     email: z.string().email(),
@@ -27,7 +29,8 @@ function Profile() {
     password: z
       .string()
       .min(4, "Password must be at least 4 characters")
-      .max(8, "Password must be at most 8 characters"),
+      .max(8, "Password must be at most 8 characters")
+      .optional(),
   });
 
   const form = useForm({
@@ -59,17 +62,33 @@ function Profile() {
       });
     }
   }
+  useEffect(() => {
+    if (user?.user) {
+      form.reset({
+        name: user.user.name || "",
+        email: user.user.email || "",
+        bio: user.user.bio || "",
+        password: "",
+      });
+    }
+  }, [user]);
   return (
     <Card className={"mx-auto max-w-screen-md "}>
       {/* header */}
+      <CardHeader>
+        <Avatar className={"w-28 h-28 mx-auto"}>
+          <AvatarImage src={user?.user?.avatar || "src/assets/profile.png"} />
+          <AvatarFallback>
+            <img src="src/assets/profile.png" alt="" />
+          </AvatarFallback>
+        </Avatar>
+        <CardAction>
+          <Button onClick={() => setPasswordChanging(!passwordChanging)}>
+            change Password
+          </Button>
+        </CardAction>
+      </CardHeader>
       <form className="space-y-5" onSubmit={form.handleSubmit(onSubmit)}>
-        <CardHeader>
-          <Avatar className={"w-28 h-28 mx-auto"}>
-            <AvatarImage
-              src={user?.user?.avatar || "/src/assets/profile.png"}
-            />
-          </Avatar>
-        </CardHeader>
         {/* content */}
         <CardContent>
           <Controller
@@ -132,27 +151,54 @@ function Profile() {
             )}
           />
           {/* fourth */}
-          <Controller
-            name="password"
-            type="password"
-            control={form.control}
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor={field.name}>Password</FieldLabel>
-                <Input
-                  type="password"
-                  {...field}
-                  id={field.name}
-                  aria-invalid={fieldState.invalid}
-                  placeholder="Enter your name"
-                  autoComplete="off"
-                />
-                {fieldState.invalid && (
-                  <FieldError errors={[fieldState.error]} />
+          {passwordChanging && (
+            <>
+              {/* //* old password filed  */}
+              <Controller
+                name="oldPassword"
+                type="password"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor={field.name}>Old Password</FieldLabel>
+                    <Input
+                      type="password"
+                      {...field}
+                      id={field.name}
+                      aria-invalid={fieldState.invalid}
+                      placeholder="Enter your oldPassword"
+                      autoComplete="off"
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
                 )}
-              </Field>
-            )}
-          />
+              />
+              {/* // ? new password field */}
+              <Controller
+                name="newPassword"
+                type="password"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor={field.name}>New Password</FieldLabel>
+                    <Input
+                      type="password"
+                      {...field}
+                      id={field.name}
+                      aria-invalid={fieldState.invalid}
+                      placeholder="Enter your new password"
+                      autoComplete="off"
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+            </>
+          )}
         </CardContent>
         {/* footer */}
         <CardFooter>

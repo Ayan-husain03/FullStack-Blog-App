@@ -12,7 +12,7 @@ function Layout() {
         <TopBar />
         <AppSidebar />
         <main className="w-full">
-          <div className="w-full h-dvh pt-20 px-2">
+          <div className="w-full min-h-[calc(100vh-80px)] pt-20 px-2">
             <Outlet />
           </div>
           <Footer />

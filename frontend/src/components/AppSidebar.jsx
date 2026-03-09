@@ -13,6 +13,7 @@ import {
 import { Link } from "react-router";
 import blogIcon from "@/assets/blogIcon.png";
 import { FileText, Home, Layers, MessageCircle, User } from "lucide-react";
+import { profile } from "@/helper/routesNames";
 
 function AppSidebar() {
   return (
@@ -57,7 +58,7 @@ function AppSidebar() {
             </SidebarMenuItem>
             <SidebarMenuItem>
               <SidebarMenuButton>
-                <Link to={"/"} className="flex gap-1">
+                <Link to={profile} className="flex gap-1">
                   <User />
                   User
                 </Link>
