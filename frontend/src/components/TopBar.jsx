@@ -25,9 +25,9 @@ const TopBar = () => {
   const dispatch = useDispatch();
   // console.log(user);
   // console.log(user?.user?.avatar);
-  function capitalize(word) {
-    return word.charAt(0).toUpperCase() + word.slice(1);
-  }
+  // function capitalize(word) {
+  //   return word.charAt(0).toUpperCase() + word.slice(1) || "";
+  // }
   const handleLogout = async () => {
     try {
       const res = await api.get("/user/logout");
@@ -79,7 +79,7 @@ const TopBar = () => {
             <DropdownMenuContent>
               <DropdownMenuGroup>
                 <DropdownMenuLabel>
-                  <p>{capitalize(user?.user?.name)}</p>
+                  <p>{user?.user?.name}</p>
                   <p className="text-xs text-gray-500">
                     {user?.user?.email || ""}
                   </p>

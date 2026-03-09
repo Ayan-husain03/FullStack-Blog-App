@@ -16,9 +16,13 @@ import ProtectedRoute from "./route/ProtectedRoute";
 function App() {
   const dispatch = useDispatch();
   const fetchUser = async () => {
-    const res = await getCurrentUser();
-    console.log(res);
-    dispatch(setUser(res.data));
+    try {
+      const res = await getCurrentUser();
+      // console.log(res);
+      dispatch(setUser(res.data));
+    } catch (error) {
+      dispatch(setUser(null));
+    }
   };
   useEffect(() => {
     fetchUser();
