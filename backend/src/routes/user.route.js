@@ -5,6 +5,7 @@ import {
   login,
   logout,
   registerUser,
+  updateUser,
 } from "../controller/userController.js";
 import authMiddleware from "../middleware/auth.middleware.js";
 
@@ -15,6 +16,6 @@ userRouter.post("/register", registerUser);
 userRouter.post("/login", login);
 userRouter.post("/google", googleLogin);
 userRouter.get("/logout", logout);
-userRouter.get("/me", authMiddleware, getUser);
-
+userRouter.get("/me", getUser);
+userRouter.get("/update-user", authMiddleware, updateUser);
 export default userRouter;

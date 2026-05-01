@@ -11,7 +11,9 @@ import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useEffect, useState } from "react";
+import { Camera } from "lucide-react";
+import React, { useCallback, useEffect, useState } from "react";
+import Dropzone from "react-dropzone";
 import { Controller, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
@@ -22,6 +24,7 @@ function Profile() {
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const [passwordChanging, setPasswordChanging] = useState(false);
+  const [avatarPreview, setAvatarPreview] = useState("");
   const formSchema = z.object({
     name: z.string().min(3, "name must be 3 char long"),
     email: z.string().email(),
@@ -44,7 +47,8 @@ function Profile() {
   });
   async function onSubmit(data) {
     try {
-      const res = await api.post("/user/login", data);
+      const id = user?.user?._id;
+      const res = await api.put(`/user/update-user`, data);
       // console.log(res.data?.message);
       toast.success("User LogIn", {
         description: res.data?.message || "you have been login",
@@ -72,16 +76,40 @@ function Profile() {
       });
     }
   }, [user]);
+
+  const handleFileUpload = (files) => {
+    const file = files[0];
+    const url = URL.createObjectURL(file);
+    setAvatarPreview(url);
+  };
+
   return (
     <Card className={"mx-auto max-w-screen-md "}>
       {/* header */}
       <CardHeader>
-        <Avatar className={"w-28 h-28 mx-auto"}>
-          <AvatarImage src={user?.user?.avatar || "src/assets/profile.png"} />
-          <AvatarFallback>
-            <img src="src/assets/profile.png" alt="" />
-          </AvatarFallback>
-        </Avatar>
+        <Dropzone onDrop={(acceptedFiles) => handleFileUpload(acceptedFiles)}>
+          {({ getRootProps, getInputProps }) => (
+            <div {...getRootProps()}>
+              <input {...getInputProps()} />
+              <Avatar className={"w-28 h-28 mx-auto relative group"}>
+                <AvatarImage
+                  src={
+                    avatarPreview
+                      ? avatarPreview
+                      : user?.user?.avatar || "src/assets/profile.png"
+                  }
+                />
+                <div className="bg-black/50  group-hover:flex w-full h-full z-50 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 hidden justify-center items-center cursor-pointer">
+                  <Camera className="text-white" />
+                </div>
+                <AvatarFallback>
+                  <img src="src/assets/profile.png" alt="" />
+                </AvatarFallback>
+              </Avatar>
+            </div>
+          )}
+        </Dropzone>
+
         <CardAction>
           <Button onClick={() => setPasswordChanging(!passwordChanging)}>
             change Password

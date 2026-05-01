@@ -94,4 +94,9 @@ const getUser = async (req, res, next) => {
   return responseHandle(res, 200, user, "user fetch successfully");
 };
 
-export { registerUser, login, googleLogin, logout, getUser };
+// ?update usercontroller
+const updateUser = async(req, res, next) => { 
+  
+}
+
+export { registerUser, login, googleLogin, logout, getUser, updateUser };

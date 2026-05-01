@@ -6,6 +6,8 @@ import { Navigate } from "react-router";
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useSelector((state) => state.user);
+  console.log(user);
+  console.log(loading);
   if (loading) {
     return <Loading />;
   }

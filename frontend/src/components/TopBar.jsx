@@ -1,6 +1,7 @@
 import React from "react";
 import blogIcon from "@/assets/blogIcon.png";
 import { Button } from "./ui/button";
+import { SidebarTrigger } from "./ui/sidebar";
 import { Link } from "react-router";
 import { LogIn, LogOut, Plus, User } from "lucide-react";
 import SearchBox from "./SearchBox";
@@ -44,16 +45,21 @@ const TopBar = () => {
     }
   };
   return (
-    <div className="flex justify-between items-center md:px-12 px-3  w-full fixed py-3 z-40 shadow-sm border-b bg-white/50 backdrop-blur-sm ">
-      <div>
-        <Link to={RouteIndex}>
-          <img src={blogIcon} alt="" />
+    <div className="flex justify-between items-center md:px-12 px-3 w-full fixed top-0 py-3 z-40 shadow-sm border-b bg-white/80 backdrop-blur-sm">
+      <div className="flex items-center gap-2">
+        <div className="md:hidden">
+          <SidebarTrigger />
+        </div>
+        <Link to={RouteIndex} className="flex items-center">
+          <img src={blogIcon} alt="" className="h-8 w-8" />
+          <span className="ml-2 text-lg font-bold hidden sm:inline">Blog</span>
         </Link>
       </div>
-      <div className="w-md">
+      <div className="hidden sm:flex grow justify-center max-w-md">
         <SearchBox />
       </div>
-      <div>
+      <div className="flex items-center gap-2">
+        {" "}
         {!user.isLoggedIn ? (
           <Button asChild>
             <Link
@@ -71,8 +77,8 @@ const TopBar = () => {
                 <AvatarImage
                   src={user?.user?.avatar || "https://placehold.net/avatar.png"}
                 />
-                  <AvatarFallback>
-                      <img src="src/assets/profile.png" alt="" />
+                <AvatarFallback>
+                  <img src="src/assets/profile.png" alt="" />
                 </AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>

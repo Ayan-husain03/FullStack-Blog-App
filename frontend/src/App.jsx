@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Button } from "./components/ui/button";
-import { BrowserRouter, Route, Routes } from "react-router";
+import { Route, Routes, BrowserRouter } from "react-router";
 import Layout from "./layout/Layout";
 import Index from "./pages/Index";
 import SignIn from "./pages/SignIn";
@@ -18,34 +18,36 @@ function App() {
   const fetchUser = async () => {
     try {
       const res = await getCurrentUser();
-      // console.log(res);
+      console.log(res);
       dispatch(setUser(res.data));
     } catch (error) {
       dispatch(setUser(null));
     }
   };
   useEffect(() => {
-    fetchUser();
+    // fetchUser();
   }, []);
   return (
     <>
+      <div>
       <BrowserRouter>
         <Routes>
+          {/* <Route path="/" element={<h1>Home</h1>} /> */}
           <Route path="/" element={<Layout />}>
             <Route
               index
               element={
-                <ProtectedRoute>
-                  <Index />
-                </ProtectedRoute>
+                // <ProtectedRoute>
+                <Index />
+                // </ProtectedRoute>
               }
             />
             <Route
               path={profile}
               element={
-                <ProtectedRoute>
-                  <Profile />
-                </ProtectedRoute>
+                // <ProtectedRoute>
+                <Profile />
+                // </ProtectedRoute>
               }
             />
           </Route>
@@ -53,7 +55,9 @@ function App() {
           <Route path={signUp} element={<Signup />} />
         </Routes>
         <Toaster richColors position="top-right" />
-      </BrowserRouter>
+        </BrowserRouter>
+
+        </div>
     </>
   );
 }
